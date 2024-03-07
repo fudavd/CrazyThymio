@@ -1,0 +1,3 @@
+flatpak run --command=thymio-device-manager org.mobsya.ThymioSuite
+python3 -m tdmclient run --stop
+
