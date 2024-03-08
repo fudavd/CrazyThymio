@@ -169,10 +169,9 @@ if __name__ == '__main__':
                         print(f"u: {u}, w: {w}, X: {pos_xs}, Y: {pos_ys}, h: {pos_hs}, distances: {distances},")
 
 
-                        # left = constant * (u - (w*2.75 / 2) * 0.085) / 0.021
-                        # right = constant * (u + (w*2.75 / 2) * 0.085) / 0.021
-                        left = 0
-                        right = 0
+                        left = constant * (u - (w*2.75 / 2) * 0.085) / 0.021
+                        right = constant * (u + (w*2.75 / 2) * 0.085) / 0.021
+
                         
                     else:
                         u = 0.0
