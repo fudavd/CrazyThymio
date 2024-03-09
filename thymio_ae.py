@@ -163,20 +163,16 @@ if __name__ == '__main__':
 
                         left = constant * (u - (w*2.75 / 2) * 0.085) / 0.021
                         right = constant * (u + (w*2.75 / 2) * 0.085) / 0.021
+                        time_last = time.time()
                         if np.isnan([u, w]).any():
                             left = 0.0
                             right = 0.0
                             raise ValueError
-
-                        
-                    else:
-                        u = 0.0
-                        w = 0.0
-                        left = 0
-                        right = 0
-
-
-                    time_last = time.time()
+                    # else:
+                    #     u = 0.0
+                    #     w = 0.0
+                    #     left = 0
+                    #     right = 0
                     i += 1
 
                     targets_g = {"motor.left.target": [int(left)], "motor.right.target": [int(right)]}
