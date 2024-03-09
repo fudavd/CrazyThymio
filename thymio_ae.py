@@ -189,8 +189,11 @@ if __name__ == '__main__':
 
                 except KeyboardInterrupt:
                     print("Terminated!")
-                    np.save('./logs/log_quad_dist.npy', log_quadrant_distance)
-                    np.save('./logs/log_neg_headings.npy', log_neg_rel_heading)
+                    # np.save('./logs/log_quad_dist.npy', log_quadrant_distance)
+                    # np.save('./logs/log_neg_headings.npy', log_neg_rel_heading)
+                    targets_g = {"motor.left.target": [0], "motor.right.target": [0]}
+                    call_program()
                     os.system("python3 -m tdmclient run --stop")
+                    print("exiting program")
                     sys.exit()
                 
