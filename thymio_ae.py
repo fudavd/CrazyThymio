@@ -140,8 +140,8 @@ if __name__ == '__main__':
                         np.divide(np.power(sigma_const, 2), np.power(distances, 3))))
                         px_s = np.multiply(pi_s, np.cos(np.array(bearings)))
                         py_s = np.multiply(pi_s, np.sin(np.array(bearings)))
-                        pbar_xs = np.sum(px_s, axis=0)
-                        pbar_ys = np.sum(py_s, axis=0)
+                        pbar_xs = np.nansum(px_s, axis=0)
+                        pbar_ys = np.nansum(py_s, axis=0)
 
                         if len(headings[distances < 1.99]) > 0:
                             angle_av = np.mean(headings[distances < 1.99]) - pos_hs
@@ -169,9 +169,12 @@ if __name__ == '__main__':
 
                         print(f"u: {u}, w: {w}, X: {pos_xs}, Y: {pos_ys}, h: {pos_hs}, distances: {distances},")
 
-
                         left = constant * (u - (w*2.75 / 2) * 0.085) / 0.021
                         right = constant * (u + (w*2.75 / 2) * 0.085) / 0.021
+                        if np.isnan([u, w]).any():
+                            left = 0.0
+                            right = 0.0
+                            raise ValueError
 
                         
                     else:
@@ -190,8 +193,6 @@ if __name__ == '__main__':
                 print("Terminated!")
                 # np.save('./logs/log_quad_dist.npy', log_quadrant_distance)
                 # np.save('./logs/log_neg_headings.npy', log_neg_rel_heading)
-                targets_g = {"motor.left.target": [0], "motor.right.target": [0]}
-                call_program()
                 os.system("python3 -m tdmclient run --stop")
                 print("exiting program")
                 sys.exit()
