@@ -180,8 +180,9 @@ if __name__ == '__main__':
 
                     targets_g = {"motor.left.target": [int(left)], "motor.right.target": [int(right)]}
                     call_program()
-            except:
-                print("Terminated!")
+            except Exception as e:
+                print("Terminated:")
+                print(e.with_traceback())
                 # np.save('./logs/log_quad_dist.npy', log_quadrant_distance)
                 # np.save('./logs/log_neg_headings.npy', log_neg_rel_heading)
                 os.system("python3 -m tdmclient run --stop")
