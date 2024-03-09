@@ -12,8 +12,7 @@ import numpy as np
 from tdmclient import ClientAsync
 
 uri = 'usb://0'
-global pos_xs, pos_ys, pos_hs, q1dist, q2dist, q3dist, q4dist, q1h, q2h, q3h, q4h, user_input, log_quadrant_distance, log_neg_rel_heading
-user_input = 'z'
+global pos_xs, pos_ys, pos_hs, q1dist, q2dist, q3dist, q4dist, q1h, q2h, q3h, q4h, light_int, log_quadrant_distance, log_neg_rel_heading
 pos_xs = np.array([])
 pos_ys = np.array([])
 log_quadrant_distance = np.array([])
@@ -23,6 +22,7 @@ q1dist = 99
 q2dist = 99
 q3dist = 99
 q4dist = 99
+light_int = 0
 q1h = 0
 q2h = 0
 q3h = 0
@@ -32,15 +32,6 @@ q4h = 0
 u = 0
 w = 0
 start_time = 0
-
-def update_u_w():
-    global u, w, start_time, user_input
-    while True:
-        try:
-            user_input = input("Enter new values for u and w, separated by a space: ")
-            start_time = time.time()
-        except ValueError:
-            print("Please enter two numbers separated by a space.")
 
 
 def activate_high_level_commander(cf):
@@ -56,7 +47,7 @@ def reset_estimator(cf):
 
 
 def log_cf(scf):
-    global pos_xs, pos_ys, pos_hs, q1dist, q2dist, q3dist, q4dist, q1h, q2h, q3h, q4h, log_quadrant_distance, log_neg_rel_heading
+    global pos_xs, pos_ys, pos_hs, q1dist, q2dist, q3dist, q4dist, q1h, q2h, q3h, q4h, light_int, log_quadrant_distance, log_neg_rel_heading
     log_config = LogConfig(name='Light values', period_in_ms=50)
     log_config.add_variable('stateEstimate.x', 'float')
     log_config.add_variable('stateEstimate.y', 'float')
@@ -83,6 +74,7 @@ def log_cf(scf):
             q2dist = data['synthLog.q2dist'] * 2 / 255
             q3dist = data['synthLog.q3dist'] * 2 / 255
             q4dist = data['synthLog.q4dist'] * 2 / 255
+            light_int = data['synthLog.light_intensity']
             log_quadrant_distance = np.append(log_quadrant_distance, q4dist)
             q1h = data['synthLog.q1h'] / (255 / (3.141592*2))
             q2h = data['synthLog.q2h'] / (255 / (3.141592*2))
@@ -94,7 +86,6 @@ def log_cf(scf):
 if __name__ == '__main__':
     cflib.crtp.init_drivers()
     i = 0
-    threading.Thread(target=update_u_w, daemon=True).start()
     
     epsilon = 12 
     sigma_const = 0.6
@@ -126,7 +117,7 @@ if __name__ == '__main__':
             time_last = time.time()
             try:
                 while True:
-                    if user_input == 's' and time.time() - time_last >= 0.05:
+                    if time.time() - time_last >= 0.05:
 
                         # bearings = np.array([1.571/2, 1.571/2 + 1.571, 1.571/2 + 1.571*2, 1.571/2 + 1.571*3]) 
                         bearings = np.array([0.0, 1.5708, np.pi, -1.5708]) 
@@ -167,7 +158,7 @@ if __name__ == '__main__':
                         elif w < -w_max:
                             w = -w_max
 
-                        print(f"u: {u}, w: {w}, X: {pos_xs}, Y: {pos_ys}, h: {pos_hs}, distances: {distances},")
+                        print(f"u: {u}, w: {w}, X: {pos_xs}, Y: {pos_ys}, h: {pos_hs}, li: {light_int}, distances: {distances},")
 
                         left = constant * (u - (w*2.75 / 2) * 0.085) / 0.021
                         right = constant * (u + (w*2.75 / 2) * 0.085) / 0.021
