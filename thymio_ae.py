@@ -124,8 +124,8 @@ if __name__ == '__main__':
             draw_angle = 1.5708/2
 
             time_last = time.time()
-            while True:
-                try: 
+            try:
+                while True:
                     if user_input == 's' and time.time() - time_last >= 0.05:
 
                         # bearings = np.array([1.571/2, 1.571/2 + 1.571, 1.571/2 + 1.571*2, 1.571/2 + 1.571*3]) 
@@ -186,14 +186,13 @@ if __name__ == '__main__':
 
                     targets_g = {"motor.left.target": [int(left)], "motor.right.target": [int(right)]}
                     call_program()
-
-                except KeyboardInterrupt:
-                    print("Terminated!")
-                    # np.save('./logs/log_quad_dist.npy', log_quadrant_distance)
-                    # np.save('./logs/log_neg_headings.npy', log_neg_rel_heading)
-                    targets_g = {"motor.left.target": [0], "motor.right.target": [0]}
-                    call_program()
-                    os.system("python3 -m tdmclient run --stop")
-                    print("exiting program")
-                    sys.exit()
+            except:
+                print("Terminated!")
+                # np.save('./logs/log_quad_dist.npy', log_quadrant_distance)
+                # np.save('./logs/log_neg_headings.npy', log_neg_rel_heading)
+                targets_g = {"motor.left.target": [0], "motor.right.target": [0]}
+                call_program()
+                os.system("python3 -m tdmclient run --stop")
+                print("exiting program")
+                sys.exit()
                 
