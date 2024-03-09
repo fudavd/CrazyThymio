@@ -1,3 +1,4 @@
+import os
 import sys
 import signal
 import time
@@ -190,5 +191,6 @@ if __name__ == '__main__':
                     print("Terminated!")
                     np.save('./logs/log_quad_dist.npy', log_quadrant_distance)
                     np.save('./logs/log_neg_headings.npy', log_neg_rel_heading)
+                    os.system("python3 -m tdmclient run --stop")
                     sys.exit()
                 
