@@ -116,6 +116,10 @@ if __name__ == '__main__':
             draw_angle = 1.5708/2
 
             time_last = time.time()
+            u = 0.0
+            w = 0.0
+            left = 0
+            right = 0
             try:
                 while True:
                     if time.time() - time_last >= 0.05:
