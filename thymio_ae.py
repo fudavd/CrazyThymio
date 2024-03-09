@@ -163,7 +163,7 @@ if __name__ == '__main__':
                         elif w < -w_max:
                             w = -w_max
 
-                        # print(f"u: {u}, w: {w}, X: {pos_xs}, Y: {pos_ys}, h: {pos_hs}, li: {light_int}, distances: {distances},")
+                        print(f"u: {u}, w: {w}, X: {pos_xs}, Y: {pos_ys}, h: {pos_hs}, li: {light_int}, distances: {distances},")
 
                         left = constant * (u - (w*2.75 / 2) * 0.085) / 0.021
                         right = constant * (u + (w*2.75 / 2) * 0.085) / 0.021
@@ -178,10 +178,11 @@ if __name__ == '__main__':
                     #     left = 0
                     #     right = 0
                     i += 1
-                    print(left, right)
                     targets_g = {"motor.left.target": [int(left)], "motor.right.target": [int(right)]}
                     call_program()
             except Exception as e:
+                targets_g = {"motor.left.target": [int(0)], "motor.right.target": [int(0)]}
+                call_program()
                 print("Terminated:")
                 print(e.with_traceback())
                 # np.save('./logs/log_quad_dist.npy', log_quadrant_distance)
