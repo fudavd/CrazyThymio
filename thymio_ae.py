@@ -57,7 +57,7 @@ def log_cf(scf):
     log_config.add_variable('synthLog.q2dist', 'uint8_t')
     log_config.add_variable('synthLog.q3dist', 'uint8_t')
     log_config.add_variable('synthLog.q4dist', 'uint8_t')
-    log_config.add_variable['synthLog.light_intensity']
+    log_config.add_variable('synthLog.light_intensity')
     #
     log_config.add_variable('synthLog.q1h', 'uint8_t')
     log_config.add_variable('synthLog.q2h', 'uint8_t')
