@@ -137,7 +137,9 @@ if __name__ == '__main__':
                         own_heading = pos_hs
 
                         # Get velocity commands
-                        state = np.hstack((distances, headings-own_heading, light_int))
+                        state = np.hstack((distances,
+                                           (headings-own_heading+np.pi)%(2*np.pi)-np.pi,
+                                           light_int))
                         u, w = controller.velocity_commands(state)
 
                         left = constant * (u - (w * 2.75 / 2) * 0.085) / 0.021
