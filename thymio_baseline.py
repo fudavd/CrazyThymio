@@ -142,6 +142,8 @@ if __name__ == '__main__':
                                            light_int))
                         u, w = controller.velocity_commands(state)
 
+                        print(f"u: {u}, w: {w}, X: {pos_xs}, Y: {pos_ys}, h: {pos_hs}, li: {light_int}, distances: {distances},")
+
                         left = constant * (u - (w * 2.75 / 2) * 0.085) / 0.021
                         right = constant * (u + (w * 2.75 / 2) * 0.085) / 0.021
                         if np.isnan([u, w]).any():
