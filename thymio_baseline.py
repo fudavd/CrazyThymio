@@ -135,10 +135,15 @@ if __name__ == '__main__':
                         distances = np.array([q1dist, q2dist, q3dist, q4dist])
                         headings = np.array([q1h, q2h, q3h, q4h])
                         own_heading = pos_hs
+                        headings_rel = (headings-own_heading+np.pi)%(2*np.pi)-np.pi
+                        headings_rel[distances==2.0] = 0
+
+                        if own_heading < 0:
+                            own_heading = own_heading + (3.141592*2)
 
                         # Get velocity commands
                         state = np.hstack((distances,
-                                           (headings-own_heading+np.pi)%(2*np.pi)-np.pi,
+                                           headings_rel,
                                            light_int))
                         u, w = controller.velocity_commands(state)
 
