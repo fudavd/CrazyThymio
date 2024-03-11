@@ -76,7 +76,7 @@ def log_cf(scf):
             q2dist = data['synthLog.q2dist'] * 2 / 255
             q3dist = data['synthLog.q3dist'] * 2 / 255
             q4dist = data['synthLog.q4dist'] * 2 / 255
-            light_int = data['synthLog.light_intensity'] * 1.5
+            light_int = data['synthLog.light_intensity']
             log_quadrant_distance = np.append(log_quadrant_distance, q4dist)
             q1h = data['synthLog.q1h'] / (255 / (3.141592*2))
             q2h = data['synthLog.q2h'] / (255 / (3.141592*2))
@@ -137,8 +137,8 @@ if __name__ == '__main__':
                         own_heading = (pos_hs + np.pi)%(2*np.pi)
                         headings_rel = (headings-own_heading+np.pi)%(2*np.pi)-np.pi
                         headings_rel[distances==2.0] = 0
+                        # distances[distances!=2.0] -= 0.0
                         distances[distances==2.0] = 2.01
-                        distances[distances!=2.0] -= 0.2
                         distances[distances<0] = 0
 
 
