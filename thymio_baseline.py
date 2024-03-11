@@ -137,7 +137,7 @@ if __name__ == '__main__':
                         own_heading = (pos_hs + np.pi)%(2*np.pi)
                         headings_rel = (headings-own_heading+np.pi)%(2*np.pi)-np.pi
                         headings_rel[distances==2.0] = 0
-                        distances[distances!=2.0] -= 0.2
+                        distances[distances!=2.0] /= 1.5
                         distances[distances==2.0] = 2.01
                         distances[distances<0] = 0
 
@@ -156,8 +156,8 @@ if __name__ == '__main__':
                         # left = constant * (u - (w * 2.75 / 2) * 0.085) / 0.021
                         # right = constant * (u + (w * 2.75 / 2) * 0.085) / 0.021
 
-                        left = constant * (u + 0.025 - (w*1.5 / 2) * 0.085) / 0.021
-                        right = constant * (u + 0.025 + (w*1.5 / 2) * 0.085) / 0.021
+                        left = constant * (u + 0.025 - (w*1.15 / 2) * 0.085) / 0.021
+                        right = constant * (u + 0.025 + (w*1.15 / 2) * 0.085) / 0.021
                         if np.isnan([u, w]).any():
                             left = 0.0
                             right = 0.0
