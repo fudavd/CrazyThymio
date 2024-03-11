@@ -156,8 +156,8 @@ if __name__ == '__main__':
                         # left = constant * (u - (w * 2.75 / 2) * 0.085) / 0.021
                         # right = constant * (u + (w * 2.75 / 2) * 0.085) / 0.021
 
-                        left = constant * (u + 0.025 - (w*1.75 / 2) * 0.085) / 0.021
-                        right = constant * (u + 0.025 + (w*1.75 / 2) * 0.085) / 0.021
+                        left = constant * (u - (w*1.75 / 2) * 0.085) / 0.021
+                        right = constant * (u + (w*1.75 / 2) * 0.085) / 0.021
                         if np.isnan([u, w]).any():
                             left = 0.0
                             right = 0.0
@@ -170,9 +170,14 @@ if __name__ == '__main__':
                     i += 1
                     targets_g = {"motor.left.target": [int(left)], "motor.right.target": [int(right)]}
                     call_program()
+            except KeyboardInterrupt as e:
+                print(e.with_traceback())
+                # np.save('./logs/log_quad_dist.npy', log_quadrant_distance)
+                # np.save('./logs/log_neg_headings.npy', log_neg_rel_heading)
+                os.system("python3 -m tdmclient run --stop")
+                print("exiting program")
+                sys.exit()
             except Exception as e:
-                targets_g = {"motor.left.target": [int(0)], "motor.right.target": [int(0)]}
-                call_program()
                 print("Terminated:")
                 print(e.with_traceback())
                 # np.save('./logs/log_quad_dist.npy', log_quadrant_distance)

@@ -13,6 +13,8 @@ class Controller(object):
         self.controller_type = "default"
         self.umax_const = 0.1
         self.wmax = 1.5708 / 2.5
+        self.umax_const = 0.08
+        self.wmax = 1.5708 / 2.5
 
     @staticmethod
     def velocity_commands(state: np.ndarray) -> np.ndarray:
