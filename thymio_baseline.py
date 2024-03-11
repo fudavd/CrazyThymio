@@ -138,6 +138,9 @@ if __name__ == '__main__':
                         headings_rel = (headings-own_heading+np.pi)%(2*np.pi)-np.pi
                         headings_rel[distances==2.0] = 0
                         distances[distances==2.0] = 2.01
+                        distances[not distances==2.0] -= 0.2
+                        distances = np.max(0, distances)
+
 
                         if own_heading < 0:
                             own_heading = own_heading + (3.141592*2)
