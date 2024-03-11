@@ -133,7 +133,7 @@ if __name__ == '__main__':
                         bearings = np.array([0.0, 1.5708, np.pi, -1.5708])
                         k = 4
                         distances = np.array([q1dist, q2dist, q3dist, q4dist])
-                        headings = np.array([q1h, q2h, q3h, q4h])
+                        headings = (np.array([q1h, q2h, q3h, q4h]) + np.pi)%(2*np.pi)
                         own_heading = pos_hs
                         headings_rel = (headings-own_heading+np.pi)%(2*np.pi)-np.pi
                         headings_rel[distances==2.0] = 0
