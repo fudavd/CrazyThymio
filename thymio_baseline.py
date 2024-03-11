@@ -138,7 +138,7 @@ if __name__ == '__main__':
                         headings_rel = (headings-own_heading+np.pi)%(2*np.pi)-np.pi
                         headings_rel[distances==2.0] = 0
                         distances[distances==2.0] = 2.01
-                        distances[~ distances==2.0] -= 0.2
+                        distances[~(distances==2.0)] -= 0.2
                         distances = np.max(0, distances)
 
 
