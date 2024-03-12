@@ -102,6 +102,7 @@ if __name__ == '__main__':
     controller.geno2pheno(genotype)
 
     with ClientAsync() as client:
+        client.DEFAULT_SLEEP /= 2
         async def change_node_var():
             with await client.lock() as node:
                 await node.watch(variables=True)
@@ -172,7 +173,7 @@ if __name__ == '__main__':
                     #     right = 0
                     i += 1
                     targets_g = {"motor.left.target": [int(left)], "motor.right.target": [int(right)]}
-                    # call_program()
+                    call_program()
             except KeyboardInterrupt as e:
                 print("KeyBoard interrupt detected!")
                 # np.save('./logs/log_quad_dist.npy', log_quadrant_distance)

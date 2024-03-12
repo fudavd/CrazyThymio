@@ -99,6 +99,7 @@ if __name__ == '__main__':
     K2 = 0.1
 
     with ClientAsync() as client:
+        client.DEFAULT_SLEEP /= 2
         async def change_node_var():
             with await client.lock() as node:
                 await node.watch(variables=True)
