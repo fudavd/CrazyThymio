@@ -127,14 +127,14 @@ if __name__ == '__main__':
             left = 0
             right = 0
 
-            init_rot = np.random.rand()/2
-            left = constant * (- (init_rot * 2 / 2) * 0.085) / 0.021 * 0.2
-            right = constant * ((init_rot * 2 / 2) * 0.085) / 0.021 * 0.2
+            init_rot = np.random.rand()*2*np.pi - np.pi
+            left = constant * (- (init_rot * 2 / 2) * 0.085) / 0.021 * 0.25
+            right = constant * ((init_rot * 2 / 2) * 0.085) / 0.021 * 0.25
             targets_g = {"motor.left.target": [int(left)], "motor.right.target": [int(right)]}
             while time.time() - time_last < 5:
                 call_program()
 
-            time_last = time.time()
+            time_last = time.time()+1
             try:
                 while True:
                     if time.time() - time_last >= 0.05:
