@@ -134,7 +134,7 @@ if __name__ == '__main__':
             while time.time() - time_last < 5:
                 call_program()
 
-            time_last = time.time()+1
+            time_last = time.time()+5
             try:
                 while True:
                     if time.time() - time_last >= 0.05:
@@ -180,9 +180,9 @@ if __name__ == '__main__':
                     #     w = 0.0
                     #     left = 0
                     #     right = 0
-                    i += 1
-                    targets_g = {"motor.left.target": [int(left)], "motor.right.target": [int(right)]}
-                    call_program()
+                        i += 1
+                        targets_g = {"motor.left.target": [int(left)], "motor.right.target": [int(right)]}
+                        call_program()
             except KeyboardInterrupt as e:
                 print("KeyBoard interrupt detected!")
                 # np.save('./logs/log_quad_dist.npy', log_quadrant_distance)
