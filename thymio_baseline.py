@@ -126,6 +126,15 @@ if __name__ == '__main__':
             w = 0.0
             left = 0
             right = 0
+
+            init_rot = np.random.rand()/2
+            left = constant * (- (init_rot * 2 / 2) * 0.085) / 0.021 * 0.2
+            right = constant * ((init_rot * 2 / 2) * 0.085) / 0.021 * 0.2
+            targets_g = {"motor.left.target": [int(left)], "motor.right.target": [int(right)]}
+            while time.time() - time_last < 5:
+                call_program()
+
+            time_last = time.time()
             try:
                 while True:
                     if time.time() - time_last >= 0.05:
@@ -159,8 +168,8 @@ if __name__ == '__main__':
                         # left = constant * (u - (w * 2.75 / 2) * 0.085) / 0.021
                         # right = constant * (u + (w * 2.75 / 2) * 0.085) / 0.021
 
-                        left = constant * (u + 0.025 - (w* 2 / 2) * 0.085) / 0.021 * 0.15
-                        right = constant * (u + 0.025 + (w* 2 / 2) * 0.085) / 0.021 * 0.15
+                        left = constant * (u + 0.025 - (w* 2 / 2) * 0.085) / 0.021 * 0.2
+                        right = constant * (u + 0.025 + (w* 2 / 2) * 0.085) / 0.021 * 0.2
                         if np.isnan([u, w]).any():
                             left = 0.0
                             right = 0.0
