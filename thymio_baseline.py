@@ -164,6 +164,7 @@ if __name__ == '__main__':
                             left = 0.0
                             right = 0.0
                             raise ValueError
+                        time_last = time.time()
                     # else:
                     #     u = 0.0
                     #     w = 0.0
@@ -171,7 +172,7 @@ if __name__ == '__main__':
                     #     right = 0
                     i += 1
                     targets_g = {"motor.left.target": [int(left)], "motor.right.target": [int(right)]}
-                    call_program()
+                    # call_program()
             except KeyboardInterrupt as e:
                 print("KeyBoard interrupt detected!")
                 # np.save('./logs/log_quad_dist.npy', log_quadrant_distance)
