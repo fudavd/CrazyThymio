@@ -102,7 +102,7 @@ if __name__ == '__main__':
     controller.geno2pheno(genotype)
 
     with ClientAsync() as client:
-        client.DEFAULT_SLEEP /= 5
+        client.DEFAULT_SLEEP /= 10
         async def change_node_var():
             with await client.lock() as node:
                 await node.watch(variables=True)
