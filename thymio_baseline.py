@@ -133,8 +133,8 @@ if __name__ == '__main__':
             targets_g = {"motor.left.target": [int(left)], "motor.right.target": [int(right)]}
             while time.time() - time_last < 5:
                 call_program()
-            if uri == 'usb://0':
-                time.sleep(4.0)
+            targets_g = {"motor.left.target": [int(0)], "motor.right.target": [int(0)]}
+            call_program()
             waiter = input("Enter new values for u and w, separated by a space: ")
             time_last = time.time()
             try:
