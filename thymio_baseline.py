@@ -135,7 +135,7 @@ if __name__ == '__main__':
                 call_program()
             if uri == 'usb://0':
                 time.sleep(4.0)
-
+            waiter = input("Enter new values for u and w, separated by a space: ")
             time_last = time.time()
             try:
                 while True:
