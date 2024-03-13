@@ -49,7 +49,7 @@ def reset_estimator(cf):
 
 def log_cf(scf):
     global pos_xs, pos_ys, pos_hs, q1dist, q2dist, q3dist, q4dist, q1h, q2h, q3h, q4h, light_int, log_quadrant_distance, log_neg_rel_heading
-    log_config = LogConfig(name='Light values', period_in_ms=50)
+    log_config = LogConfig(name='Light values', period_in_ms=100)
     log_config.add_variable('stateEstimate.x', 'float')
     log_config.add_variable('stateEstimate.y', 'float')
     log_config.add_variable('stateEstimate.yaw', 'float')
@@ -128,13 +128,15 @@ if __name__ == '__main__':
             right = 0
 
             init_rot = np.random.rand()*2*np.pi - np.pi
-            left = constant * (- (init_rot * 2 / 2) * 0.085) / 0.021 * 0.2
-            right = constant * ((init_rot * 2 / 2) * 0.085) / 0.021 * 0.2
+            left = constant * (- (init_rot / 2) * 0.085) / 0.021 * 0.2
+            right = constant * ((init_rot / 2) * 0.085) / 0.021 * 0.2
             targets_g = {"motor.left.target": [int(left)], "motor.right.target": [int(right)]}
             while time.time() - time_last < 5:
                 call_program()
+            if uri == 'usb://0':
+                time.sleep(4.0)
 
-            time_last = time.time()+2
+            time_last = time.time()
             try:
                 while True:
                     if time.time() - time_last >= 0.05:
@@ -175,11 +177,11 @@ if __name__ == '__main__':
                             right = 0.0
                             raise ValueError
                         time_last = time.time()
-                    # else:
-                    #     u = 0.0
-                    #     w = 0.0
-                    #     left = 0
-                    #     right = 0
+                        # else:
+                        #     u = 0.0
+                        #     w = 0.0
+                        #     left = 0
+                        #     right = 0
                         i += 1
                         targets_g = {"motor.left.target": [int(left)], "motor.right.target": [int(right)]}
                         call_program()
