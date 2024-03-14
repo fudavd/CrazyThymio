@@ -87,7 +87,7 @@ def log_cf(scf):
 if __name__ == '__main__':
     ip_end = os.popen('ifconfig | grep -oE "(inet 10.15.3.[0-9]{1,3})"').read()[:-1].split('.')[-1]
 
-    adaptive = False
+    adaptive = True
     n_subs = 2
 
     cflib.crtp.init_drivers()
