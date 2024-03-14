@@ -104,3 +104,47 @@ class NNController(Controller):
             self.model.lin1, self.model.lin2, self.model.output = np.load(path + "/reservoir.npy", allow_pickle=True)
 
 
+
+
+class adaptiveNNController(Controller):
+    def __init__(self, n_states, n_actions):
+        super().__init__(n_states, n_actions)
+        self.controller_type = "aNN"
+        self.rnn1 = NNController(n_states, n_actions)
+        self.rnn1.controller_type = "rnn1"
+        self.rnn2 = NNController(n_states, n_actions)
+        self.rnn2.controller_type = "rnn2"
+        self.probabilities = np.array([0., 0.25, 0.5, 0.75, 0.75])
+        self.intensity_thr = np.array([229.14699, 178.0845, 127.02098, 75.957306, 0])
+        self.current_controller = None
+        self.refract_time = 10
+        self.refract_n = 0
+
+    def velocity_commands(self, state: np.ndarray) -> np.ndarray:
+        """
+        Given a state, give an appropriate action
+
+        :param <np.array> state: A single observation of the current state, dimension is (state_dim)
+        :return: <np.array> action: A vector of motor inputs
+        """
+        assert (len(state) == self.n_input), "State does not correspond with expected input size"
+        local_intensity = state[-1]  # Gradient value, [0, 255]
+
+        if (self.refract_n % self.refract_time) == 0:
+            prob = self.probabilities[np.argmax(self.intensity_thr <= local_intensity)]
+            if rng.random() < prob:
+                self.current_controller = self.rnn1
+            else:
+                self.current_controller = self.rnn2
+            self.refract_n = 0
+        self.refract_n += 50
+        control_input = self.current_controller.velocity_commands(state)
+        return control_input
+
+    def geno2pheno(self, genotype: List[np.array]):
+        self.rnn1.geno2pheno(genotype[0])
+        self.rnn2.geno2pheno(genotype[1])
+
+    def load_geno(self, path: List[str]):
+        self.rnn1.load_geno(path[0])
+        self.rnn2.load_geno(path[1])
