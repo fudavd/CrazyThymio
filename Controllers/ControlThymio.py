@@ -117,7 +117,7 @@ class adaptiveNNController(Controller):
         self.probabilities = np.array([0., 0.25, 0.5, 0.75, 0.75])
         self.intensity_thr = np.array([229.14699, 178.0845, 127.02098, 75.957306, 0])
         self.current_controller = None
-        self.refract_time = 10
+        self.refract_time = 5
         self.refract_n = 0
 
     def velocity_commands(self, state: np.ndarray) -> np.ndarray:
@@ -137,7 +137,7 @@ class adaptiveNNController(Controller):
             else:
                 self.current_controller = self.rnn2
             self.refract_n = 0
-        self.refract_n += 50
+        self.refract_n += 4
         control_input = self.current_controller.velocity_commands(state)
         return control_input
 
