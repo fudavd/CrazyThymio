@@ -137,7 +137,7 @@ class adaptiveNNController(Controller):
             else:
                 self.current_controller = self.rnn2
             self.refract_n = 0
-        self.refract_n += 1
+        self.refract_n += 4
         control_input = self.current_controller.velocity_commands(state)
         return control_input
 

@@ -1,0 +1,4 @@
+[submodule "sim_exp"]
+	path = sim_exp
+	url = git@github.com:fudavd/EC_swarm.git
+	branch = CrazyThymio

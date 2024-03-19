@@ -1,0 +1,7 @@
+/usr/bin/git -C ~/Desktop/crazy_thymio/CrazyThymio/ pull
+cd ~/Desktop/crazy_thymio/CrazyThymio/
+source ../.venv/bin/activate 
+
+flatpak run --command=thymio-device-manager org.mobsya.ThymioSuite
+
+python3 -m tdmclient run --stop
