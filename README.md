@@ -65,13 +65,15 @@ ssh <user>@pi_ip_address 'chmod +x ~/Desktop/initial_config.sh'
 ssh <user>@pi_ip_address '/bin/bash/ ~/Desktop/initial_config.sh'
 ```
 
+- On the sensor hardware, install the correct firmware provided in `real_exp/CrazyThymio-firmware/examples/app_share_pos`
+
+
 - After initial configuration we can run a controller (example baseline) after establishing an ssh connection with the following commands:
 ```bash
 cd ~/Desktop/crazy_thymio/CrazyThymio/
 source ../.venv/bin/activate 
 python thymio_baseline.py
 ```
-
 -------
 ## Reproduce results
 Replication data can be downloaded from here https://doi.org/10.34894/2FBSZNMT

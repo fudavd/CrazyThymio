@@ -2,3 +2,7 @@
 	path = sim_exp
 	url = git@github.com:fudavd/EC_swarm.git
 	branch = CrazyThymio
+[submodule "real_exp/CrazyThymio-firmware"]
+	path = real_exp/CrazyThymio-firmware
+	url = git@github.com:tugayalperen/CrazyThymio-firmware.git
+	branch = CrazyThymio
