@@ -97,7 +97,7 @@ if __name__ == '__main__':
     w_max = 1.5708/2.5
     constant = 325 * (0.021 / 0.1)
 
-    experiment_folder = "./results/sim/Heterogeneous/0"
+    experiment_folder = "./results/sim/Hebbian/1"
     reservoir_dirs = [experiment_folder + f'/subgroup_{n_sub}' for n_sub in range(n_subs)]
     x_best = np.load(f"{experiment_folder}/x_best.npy")
 

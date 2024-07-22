@@ -94,7 +94,7 @@ if __name__ == '__main__':
     constant = 325 * (0.021 / 0.1)
 
     ## Load Controller
-    experiment_folder = "./results/sim/Baseline/0"
+    experiment_folder = "./results/sim/Baseline/1"
     controller = NNController(9, 2)
     controller.load_geno(experiment_folder)
     x_best = np.load(f"{experiment_folder}/x_best.npy")
