@@ -98,7 +98,7 @@ if __name__ == '__main__':
     controller = NNController(9, 2)
     controller.load_geno(experiment_folder)
     x_best = np.load(f"{experiment_folder}/x_best.npy")
-    genotype = x_best[99]
+    genotype = x_best[-1]
     controller.geno2pheno(genotype)
 
     with ClientAsync() as client:

@@ -10,7 +10,7 @@ from cflib.crazyflie.syncCrazyflie import SyncCrazyflie
 from cflib.crazyflie.syncLogger import SyncLogger
 import numpy as np
 from tdmclient import ClientAsync
-from Controllers.ControlThymio import NNController, adaptiveNNController
+from Controllers.ControlThymio import hebbianNNController
 
 uri = 'usb://0'
 global pos_xs, pos_ys, pos_hs, q1dist, q2dist, q3dist, q4dist, q1h, q2h, q3h, q4h, light_int, log_quadrant_distance, log_neg_rel_heading
@@ -98,24 +98,11 @@ if __name__ == '__main__':
     constant = 325 * (0.021 / 0.1)
 
     experiment_folder = "./results/sim/Hebbian/1"
-    reservoir_dirs = [experiment_folder + f'/subgroup_{n_sub}' for n_sub in range(n_subs)]
     x_best = np.load(f"{experiment_folder}/x_best.npy")
 
-    if adaptive:
-        controller = adaptiveNNController(9,2)
-        controller.load_geno(reservoir_dirs)
-        ## Load Controller
-        genotype = [x_best[99][n_sub * 18:(1 + n_sub) * 18] for n_sub in range(n_subs)]
-
-        controller.geno2pheno(genotype)
-    else:
-        controller = NNController(9, 2)
-        n_sub = int(ip_end <= '86')
-
-        controller.load_geno(reservoir_dirs[n_sub])
-        rgb = [n_sub , 1 - n_sub, 0]
-        genotype = x_best[99][n_sub * 18:(1 + n_sub) * 18]
-        controller.geno2pheno(genotype)
+    controller = hebbianNNController(9, 2)
+    controller.load_geno(experiment_folder)
+    controller.geno2pheno(x_best)
 
 
     with ClientAsync() as client:
