@@ -292,19 +292,36 @@ def Robustness():
 
 if __name__ == '__main__':
     print("STARTING retesting best controller experiments")
-    ## Re-test best controller same environment
-    # Ratios()
-    # Aligment()
+    c_types = ['baseline', 'hebbian']
+    arenas = [f"bimodal_30x30",
+              f"linear_30x30",
+              f"banana_30x30", ]
+    swarm_sizes = [10, 20, 50]
+
+    for experiment_name in c_types:
+        results_dir = os.path.join("./results", experiment_name)
+        filenames_fit = search_file_list(results_dir, 'fitnesses.npy')
+        best_fitness = -np.inf
+        best_genome = None
+        best_folder = None
+        best_runs = []
+        for filename in filenames_fit:
+            fitnesses = np.load(filename)
+            if fitnesses.max() > best_fitness:
+                best_fitness = fitnesses.max()
+                best_folder = filename.replace('fitnesses.npy', '')
+                best_genome = np.load(best_folder + 'x_best.npy')[-1]
+
+                best_run = int(best_folder.split('/')[-1])
+                print(best_folder, best_fitness)
+        if best_genome is None:
+            print("No best genome found")
+            break
 
     ## Scalability [swarm size] and Robustness [arenas] with best and adaptive ratio
     Scalability()
     Robustness()
 
-    arenas = [f"bimodal_30x30",
-              f"linear_30x30",
-              f"banana_30x30", ]
-    c_types = ['baseline', 'hebbian']
-    swarm_sizes = [10, 20, 50]
     data_best = []
     data_adapt = []
     for swarm_size in swarm_sizes:
