@@ -87,9 +87,6 @@ def log_cf(scf):
 if __name__ == '__main__':
     ip_end = os.popen('ifconfig | grep -oE "(inet 10.15.3.[0-9]{1,3})"').read()[:-1].split('.')[-1]
 
-    adaptive = True
-    n_subs = 2
-
     cflib.crtp.init_drivers()
     i = 0
 
@@ -97,8 +94,8 @@ if __name__ == '__main__':
     w_max = 1.5708/2.5
     constant = 325 * (0.021 / 0.1)
 
-    experiment_folder = "./results/sim/Hebbian/1"
-    x_best = np.load(f"{experiment_folder}/x_best.npy")
+    experiment_folder = "./results/sim/Hebbian/0"
+    x_best = np.load(f"{experiment_folder}/x_best.npy")[-1]
 
     controller = hebbianNNController(9, 2)
     controller.load_geno(experiment_folder)

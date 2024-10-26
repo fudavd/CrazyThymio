@@ -1,4 +1,4 @@
-
+import copy
 from typing import List
 
 import numpy
@@ -109,6 +109,8 @@ class hebbianNNController(Controller):
     def __init__(self, n_states, n_actions):
         super().__init__(n_states, n_actions)
         self.controller_type = "hNN"
+        self.dir = './results'
+
         self.weights_l1 = np.random.normal(0, 0.1, (n_states, n_states))
         self.weights_l2 = np.random.normal(0, 0.1, (n_states, n_states))
         self.weights_out = np.random.normal(0, 0.1, (n_actions, n_states))
@@ -119,10 +121,10 @@ class hebbianNNController(Controller):
         self.C = np.random.normal(0, 0.1, n_states*(n_actions+2*n_states))
         self.D = np.random.normal(0, 0.1, n_states*(n_actions+2*n_states))
 
-        self.update_n = 0
-        self.update_freq = 10
-        self.refract_n = 0
-        self.current_controller = None
+        self.log_weights = False
+        self.l1_log = [copy.deepcopy(self.weights_l1)]
+        self.l2_log = [copy.deepcopy(self.weights_l2)]
+        self.out_log = [copy.deepcopy(self.weights_out)]
 
     def map_state(self, min_from, max_from, min_to, max_to, state_portion):
         return min_to + np.multiply((max_to - min_to), np.divide((state_portion - min_from), (max_from - min_from)))
@@ -141,27 +143,34 @@ class hebbianNNController(Controller):
                                     state[4:8])  # Assumed distance sensing range is 2.0 meters. If not, check!
         state[-1] = self.map_state(0, 255.0, -1, 1, state[-1])  # Gradient value, [0, 255]
 
+        # if len(self.l1_log) > 3000:
+        #     state[-1] = -1 + (len(self.l1_log)-3000)/1500
+
         x1 = np.tanh(np.dot(self.weights_l1, state))
         x2 = np.tanh(np.dot(self.weights_l2, x1))
         out = np.tanh(np.dot(self.weights_out, x2))
 
-        if (self.update_n % self.update_freq) == 0:
-            pre_synaptic = np.hstack((np.tile(state, x1.size),
-                                      np.tile(x1, x2.size),
-                                      np.tile(x2, out.size)))
-            pos_synaptic = np.hstack((x1, x2, out)).repeat(state.size)
+        pre_synaptic = np.hstack((np.tile(state, x1.size),
+                                  np.tile(x1, x2.size),
+                                  np.tile(x2, out.size)))
+        pos_synaptic = np.hstack((x1, x2, out)).repeat(state.size)
 
-            weights_delta = self.lr*(self.A*pre_synaptic*pos_synaptic +
-                                     self.B*pre_synaptic +
-                                     self.C*pos_synaptic +
-                                     self.D)
+        weights_delta = self.lr*(self.A*pre_synaptic*pos_synaptic +
+                                 self.B*pre_synaptic +
+                                 self.C*pos_synaptic +
+                                 self.D)
 
-            self.weights_l1 += weights_delta[:self.weights_l1.size].reshape(self.weights_l1.shape)
-            self.weights_l2 += weights_delta[self.weights_l1.size:-self.weights_out.size].reshape(self.weights_l2.shape)
-            self.weights_out += weights_delta[-self.weights_out.size:].reshape(self.weights_out.shape)
-            self.refract_n = 0
+        self.weights_l1 += weights_delta[:self.weights_l1.size].reshape(self.weights_l1.shape)
+        self.weights_l2 += weights_delta[self.weights_l1.size:-self.weights_out.size].reshape(self.weights_l2.shape)
+        self.weights_out += weights_delta[-self.weights_out.size:].reshape(self.weights_out.shape)
 
-        self.refract_n += 1
+        if self.log_weights:
+            self.l1_log.append(copy.deepcopy(self.weights_l1))
+            self.l2_log.append(copy.deepcopy(self.weights_l2))
+            self.out_log.append(copy.deepcopy(self.weights_out))
+            if len(self.l1_log) == 6000:
+                np.save(f"{self.dir}/logs_{np.random.randint(1e5)+100}", [self.l1_log,self.l2_log,self.out_log])
+
         control_input = out * np.array([self.umax_const, self.wmax])
         return control_input
 
