@@ -10,8 +10,7 @@ from cflib.crazyflie.syncCrazyflie import SyncCrazyflie
 from cflib.crazyflie.syncLogger import SyncLogger
 import numpy as np
 from tdmclient import ClientAsync
-from Controllers.ControlThymio import NNController
-
+from Controllers.ControlThymio import NNController, adaptiveNNController
 
 uri = 'usb://0'
 global pos_xs, pos_ys, pos_hs, q1dist, q2dist, q3dist, q4dist, q1h, q2h, q3h, q4h, light_int, log_quadrant_distance, log_neg_rel_heading
@@ -78,14 +77,19 @@ def log_cf(scf):
             q4dist = data['synthLog.q4dist'] * 2 / 255
             light_int = data['synthLog.light_intensity']
             log_quadrant_distance = np.append(log_quadrant_distance, q4dist)
-            q1h = data['synthLog.q1h'] / (255 / (np.pi*2))
-            q2h = data['synthLog.q2h'] / (255 / (np.pi*2))
-            q3h = data['synthLog.q3h'] / (255 / (np.pi*2))
-            q4h = data['synthLog.q4h'] / (255 / (np.pi*2))
+            q1h = data['synthLog.q1h'] / (255 / (3.141592*2))
+            q2h = data['synthLog.q2h'] / (255 / (3.141592*2))
+            q3h = data['synthLog.q3h'] / (255 / (3.141592*2))
+            q4h = data['synthLog.q4h'] / (255 / (3.141592*2))
             log_neg_rel_heading = np.append(log_neg_rel_heading, q4h)
 
 
 if __name__ == '__main__':
+    ip_end = os.popen('ifconfig | grep -oE "(inet 10.15.3.[0-9]{1,3})"').read()[:-1].split('.')[-1]
+
+    adaptive = True
+    n_subs = 2
+
     cflib.crtp.init_drivers()
     i = 0
 
@@ -93,13 +97,26 @@ if __name__ == '__main__':
     w_max = 1.5708/2.5
     constant = 325 * (0.021 / 0.1)
 
-    ## Load Controller
-    experiment_folder = "./results/sim/Baseline/1"
-    controller = NNController(9, 2)
-    controller.load_geno(experiment_folder)
-    x_best = np.load(f"{experiment_folder}/x_best.npy")
-    genotype = x_best[-1]
-    controller.geno2pheno(genotype)
+    experiment_folder = "./results/sim/Baseline-a/4"
+    reservoir_dirs = [experiment_folder + f'/subgroup_{n_sub}' for n_sub in range(n_subs)]
+    x_best = np.load(f"{experiment_folder}/x_best.npy")[-1]
+
+    if adaptive:
+        controller = adaptiveNNController(9,2)
+        controller.load_geno(reservoir_dirs)
+        ## Load Controller
+        genotype = [x_best[n_sub * 18:(1 + n_sub) * 18] for n_sub in range(n_subs)]
+
+        controller.geno2pheno(genotype)
+    else:
+        controller = NNController(9, 2)
+        n_sub = int(ip_end <= '86')
+
+        controller.load_geno(reservoir_dirs[n_sub])
+        rgb = [n_sub , 1 - n_sub, 0]
+        genotype = x_best[99][n_sub * 18:(1 + n_sub) * 18]
+        controller.geno2pheno(genotype)
+
 
     with ClientAsync() as client:
         client.DEFAULT_SLEEP /= 10
@@ -156,6 +173,7 @@ if __name__ == '__main__':
                         distances[distances<0] = 0
 
 
+
                         if own_heading < 0:
                             own_heading = own_heading + (3.141592*2)
 
@@ -170,8 +188,8 @@ if __name__ == '__main__':
                         # left = constant * (u - (w * 2.75 / 2) * 0.085) / 0.021
                         # right = constant * (u + (w * 2.75 / 2) * 0.085) / 0.021
 
-                        left = constant * (u + 0.025 - (w* 2 / 2) * 0.085) / 0.021 * 0.25
-                        right = constant * (u + 0.025 + (w* 2 / 2) * 0.085) / 0.021 * 0.25
+                        left = constant * (u + 0.025 - (w* 2.75 / 2) * 0.085) / 0.021 * 0.2
+                        right = constant * (u + 0.025 + (w* 2.75 / 2) * 0.085) / 0.021 * 0.2
                         if np.isnan([u, w]).any():
                             left = 0.0
                             right = 0.0
@@ -200,4 +218,3 @@ if __name__ == '__main__':
                 os.system("python3 -m tdmclient run --stop")
                 print("exiting program")
                 sys.exit()
-

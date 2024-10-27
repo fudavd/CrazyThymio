@@ -146,16 +146,15 @@ if __name__ == '__main__':
                         # bearings = np.array([1.571/2, 1.571/2 + 1.571, 1.571/2 + 1.571*2, 1.571/2 + 1.571*3])
                         bearings = np.array([0.0, 1.5708, np.pi, -1.5708])
                         k = 4
-                        distances = np.array([q3dist, q4dist, q1dist, q2dist])
-                        headings = (np.array([q3h, q4h, q1h, q2h]) + np.pi)%(2*np.pi)
-                        own_heading = (pos_hs + np.pi)%(2*np.pi)
+                        distances = np.array([q1dist, q2dist, q3dist, q4dist])
+                        headings = np.array([q1h, q2h, q3h, q4h])
+                        own_heading = np.array(pos_hs)
                         headings_rel = (headings-own_heading+np.pi)%(2*np.pi)-np.pi
                         headings_rel[distances==2.0] = 0
                         # distances[distances!=2.0] = np.sqrt(distances[distances!=2.0]-1.0)*2
-                        # distances[distances!=2.0] = ((distances[distances!=2.0]/2)**2*1.7)+0.3
+                        # distances[distances!=2.0] = distances[distances!=2.0]
                         distances[distances==2.0] = 2.01
                         distances[distances<0] = 0
-
 
                         if own_heading < 0:
                             own_heading = own_heading + (3.141592*2)
