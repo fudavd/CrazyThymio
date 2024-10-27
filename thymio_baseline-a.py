@@ -99,7 +99,7 @@ if __name__ == '__main__':
 
     experiment_folder = "./results/sim/Baseline-a/4"
     reservoir_dirs = [experiment_folder + f'/subgroup_{n_sub}' for n_sub in range(n_subs)]
-    x_best = np.load(f"{experiment_folder}/x_best.npy")[-1]
+    x_best = np.load(f"{experiment_folder}/x_best.npy")
 
     if adaptive:
         controller = adaptiveNNController(9,2)
