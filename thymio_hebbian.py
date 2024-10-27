@@ -140,7 +140,7 @@ if __name__ == '__main__':
             time_last = time.time()
             try:
                 while True:
-                    if time.time() - time_last >= 0.1:
+                    if time.time() - time_last >= 0.05:
                         # print(time.time() - time_last)
 
                         # bearings = np.array([1.571/2, 1.571/2 + 1.571, 1.571/2 + 1.571*2, 1.571/2 + 1.571*3])
