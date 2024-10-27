@@ -105,7 +105,7 @@ if __name__ == '__main__':
         controller = adaptiveNNController(9,2)
         controller.load_geno(reservoir_dirs)
         ## Load Controller
-        genotype = [x_best[n_sub * 18:(1 + n_sub) * 18] for n_sub in range(n_subs)]
+        genotype = [x_best[99][n_sub * 18:(1 + n_sub) * 18] for n_sub in range(n_subs)]
 
         controller.geno2pheno(genotype)
     else:
