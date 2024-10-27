@@ -170,8 +170,8 @@ if __name__ == '__main__':
                         # left = constant * (u - (w * 2.75 / 2) * 0.085) / 0.021
                         # right = constant * (u + (w * 2.75 / 2) * 0.085) / 0.021
 
-                        left = constant * (u + 0.025 - (w / 2) * 0.085) / 0.021
-                        right = constant * (u + 0.025 + (w / 2) * 0.085) / 0.021
+                        left = constant * (u + 0.025 - (w / 2) * 0.085) / 0.021 / 1.25
+                        right = constant * (u + 0.025 + (w / 2) * 0.085) / 0.021 / 1.25
 
                         if np.isnan([u, w]).any():
                             left = 0.0
